@@ -64,7 +64,7 @@ class Engineer(Role):
         self,
         name: str = "Alex",
         profile: str = "Engineer",
-        goal: str = "Write elegant, readable, extensible, efficient code",
+        goal: str = "Write elegant, readable, extensible, efficient code without TODO",
         constraints: str = "The code should conform to standards like PEP8 and be modular and maintainable",
         n_borg: int = 1,
         use_code_review: bool = False,
@@ -92,8 +92,8 @@ class Engineer(Role):
     @classmethod
     def parse_workspace(cls, system_design_msg: Message) -> str:
         if system_design_msg.instruct_content:
-            return system_design_msg.instruct_content.dict().get("Python package name").strip().strip("'").strip('"')
-        return CodeParser.parse_str(block="Python package name", text=system_design_msg.content)
+            return system_design_msg.instruct_content.dict().get("package name").strip().strip("'").strip('"')
+        return CodeParser.parse_str(block="package name", text=system_design_msg.content)
 
     def get_workspace(self) -> Path:
         msg = self._rc.memory.get_by_action(WriteDesign)[-1]

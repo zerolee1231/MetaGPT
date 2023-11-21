@@ -27,15 +27,15 @@ templates = {
 ## Format example
 {format_example}
 -----
-Role: You are an architect; the goal is to design a SOTA PEP8-compliant python system; make the best use of good open source tools
+Role: You are an architect; the goal is to design a frontend system; make the best use of good open source tools like Vue3 and tailwindcss. the project has been inited using vite. only fill files under dir src
 Requirement: Fill in the following missing information based on the context, each section name is a key in json
 Max Output: 8192 chars or 2048 tokens. Try to use them up.
 
 ## Implementation approach: Provide as Plain text. Analyze the difficult points of the requirements, select the appropriate open-source framework.
 
-## Python package name: Provide as Python str with python triple quoto, concise and clear, characters only use a combination of all lowercase and underscores
+## package name: Provide as Python str with python triple quoto, concise and clear, characters only use a combination of all lowercase and underscores
 
-## File list: Provided as Python list[str], the list of ONLY REQUIRED files needed to write the program(LESS IS MORE!). Only need relative paths, comply with PEP8 standards. ALWAYS write a main.py or app.py here
+## File list: Provided as Python list[str], the list of ONLY REQUIRED files needed to write the program(LESS IS MORE!) and dont wirte test. Only need relative paths.
 
 ## Data structures and interface definitions: Use mermaid classDiagram code syntax, including classes (INCLUDING __init__ method) and functions (with type annotations), CLEARLY MARK the RELATIONSHIPS between classes, and comply with PEP8 standards. The data structures SHOULD BE VERY DETAILED and the API should be comprehensive with a complete design. 
 
@@ -50,7 +50,7 @@ and only output the json inside this tag, nothing else
 [CONTENT]
 {
     "Implementation approach": "We will ...",
-    "Python package name": "snake_game",
+    "package name": "snake_game",
     "File list": ["main.py"],
     "Data structures and interface definitions": '
     classDiagram
@@ -86,7 +86,7 @@ Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD W
 
 ## Implementation approach: Provide as Plain text. Analyze the difficult points of the requirements, select the appropriate open-source framework.
 
-## Python package name: Provide as Python str with python triple quoto, concise and clear, characters only use a combination of all lowercase and underscores
+## package name: Provide as Python str with python triple quoto, concise and clear, characters only use a combination of all lowercase and underscores
 
 ## File list: Provided as Python list[str], the list of ONLY REQUIRED files needed to write the program(LESS IS MORE!). Only need relative paths, comply with PEP8 standards. ALWAYS write a main.py or app.py here
 
@@ -102,7 +102,7 @@ Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD W
 ## Implementation approach
 We will ...
 
-## Python package name
+## package name
 ```python
 "snake_game"
 ```
@@ -141,7 +141,7 @@ The requirement is clear to me.
 
 OUTPUT_MAPPING = {
     "Implementation approach": (str, ...),
-    "Python package name": (str, ...),
+    "package name": (str, ...),
     "File list": (List[str], ...),
     "Data structures and interface definitions": (str, ...),
     "Program call flow": (str, ...),
@@ -190,9 +190,9 @@ class WriteDesign(Action):
 
     async def _save(self, context, system_design):
         if isinstance(system_design, ActionOutput):
-            ws_name = system_design.instruct_content.dict()["Python package name"]
+            ws_name = system_design.instruct_content.dict()["package name"]
         else:
-            ws_name = CodeParser.parse_str(block="Python package name", text=system_design)
+            ws_name = CodeParser.parse_str(block= "package name", text=system_design)
         workspace = WORKSPACE_ROOT / ws_name
         self.recreate_workspace(workspace)
         docs_path = workspace / "docs"
@@ -207,11 +207,11 @@ class WriteDesign(Action):
         prompt = prompt_template.format(context=context, format_example=format_example)
         # system_design = await self._aask(prompt)
         system_design = await self._aask_v1(prompt, "system_design", OUTPUT_MAPPING, format=format)
-        # fix Python package name, we can't system_design.instruct_content.python_package_name = "xxx" since "Python package name" contain space, have to use setattr
+        # fix package name, we can't system_design.instruct_content.python_package_name = "xxx" since  package name" contain space, have to use setattr
         setattr(
             system_design.instruct_content,
-            "Python package name",
-            system_design.instruct_content.dict()["Python package name"].strip().strip("'").strip('"'),
+            "package name",
+            system_design.instruct_content.dict()["package name"].strip().strip("'").strip('"'),
         )
         await self._save(context, system_design)
         return system_design

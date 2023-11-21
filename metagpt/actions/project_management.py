@@ -27,7 +27,7 @@ Role: You are a project manager; the goal is to break down tasks according to PR
 Requirements: Based on the context, fill in the following missing information, each section name is a key in json. Here the granularity of the task is a file, if there are any missing files, you can supplement them
 Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD WRITE BEFORE the code and triple quote.
 
-## Required Python third-party packages: Provided in requirements.txt format
+## Required third-party packages: Provided in requirements.txt format
 
 ## Required Other language third-party packages: Provided in requirements.txt format
 
@@ -46,7 +46,7 @@ and only output the json inside this tag, nothing else
 """,
         "FORMAT_EXAMPLE": '''
 {
-    "Required Python third-party packages": [
+    "Required third-party packages": [
         "flask==1.1.2",
         "bcrypt==3.2.0"
     ],
@@ -83,11 +83,11 @@ Role: You are a project manager; the goal is to break down tasks according to PR
 Requirements: Based on the context, fill in the following missing information, note that all sections are returned in Python code triple quote form seperatedly. Here the granularity of the task is a file, if there are any missing files, you can supplement them
 Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD WRITE BEFORE the code and triple quote.
 
-## Required Python third-party packages: Provided in requirements.txt format
+## Required third-party packages: Provided in requirements.txt format
 
 ## Required Other language third-party packages: Provided in requirements.txt format
 
-## Full API spec: Use OpenAPI 3.0. Describe all APIs that may be used by both frontend and backend.
+## Full API spec: leave it empty if no API is needed. Use OpenAPI 3.0. Describe all APIs that may be used by both frontend and backend.
 
 ## Logic Analysis: Provided as a Python list[list[str]. the first is filename, the second is class/method/function should be implemented in this file. Analyze the dependencies between the files, which work should be done first
 
@@ -100,7 +100,7 @@ Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD W
 """,
         "FORMAT_EXAMPLE": '''
 ---
-## Required Python third-party packages
+## Required third-party packages
 ```python
 """
 flask==1.1.2
@@ -152,7 +152,7 @@ We need ... how to start.
     },
 }
 OUTPUT_MAPPING = {
-    "Required Python third-party packages": (List[str], ...),
+    "Required third-party packages": (List[str], ...),
     "Required Other language third-party packages": (List[str], ...),
     "Full API spec": (str, ...),
     "Logic Analysis": (List[List[str]], ...),
@@ -168,15 +168,15 @@ class WriteTasks(Action):
 
     def _save(self, context, rsp):
         if context[-1].instruct_content:
-            ws_name = context[-1].instruct_content.dict()["Python package name"]
+            ws_name = context[-1].instruct_content.dict()["package name"]
         else:
-            ws_name = CodeParser.parse_str(block="Python package name", text=context[-1].content)
+            ws_name = CodeParser.parse_str(block="package name", text=context[-1].content)
         file_path = WORKSPACE_ROOT / ws_name / "docs/api_spec_and_tasks.md"
         file_path.write_text(json_to_markdown(rsp.instruct_content.dict()))
 
         # Write requirements.txt
         requirements_path = WORKSPACE_ROOT / ws_name / "requirements.txt"
-        requirements_path.write_text("\n".join(rsp.instruct_content.dict().get("Required Python third-party packages")))
+        requirements_path.write_text("\n".join(rsp.instruct_content.dict().get("Required third-party packages")))
 
     async def run(self, context, format=CONFIG.prompt_format):
         prompt_template, format_example = get_template(templates, format)

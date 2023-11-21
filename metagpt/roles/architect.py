@@ -26,7 +26,7 @@ class Architect(Role):
         self,
         name: str = "Bob",
         profile: str = "Architect",
-        goal: str = "Design a concise, usable, complete python system",
+        goal: str = "Design a concise, usable, complete frontend system",
         constraints: str = "Try to specify good open source tools as much as possible",
     ) -> None:
         """Initializes the Architect with given attributes."""
