@@ -27,7 +27,7 @@ templates = {
 ## Format example
 {format_example}
 -----
-Role: You are an architect; the goal is to design a frontend system; make the best use of good open source tools like Vue3 and tailwindcss. the project has been inited using vite. only fill files under dir src
+Role: You are an architect; the goal is to design a system; make the best use of good open source tools.
 Requirement: Fill in the following missing information based on the context, each section name is a key in json
 Max Output: 8192 chars or 2048 tokens. Try to use them up.
 
@@ -79,7 +79,7 @@ and only output the json inside this tag, nothing else
 ## Format example
 {format_example}
 -----
-Role: You are an architect; the goal is to design a SOTA PEP8-compliant python system; make the best use of good open source tools
+Role: You are an architect; the goal is to design a python system; make the best use of good open source tools.
 Requirement: Fill in the following missing information based on the context, note that all sections are response with code form separately
 Max Output: 8192 chars or 2048 tokens. Try to use them up.
 Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD WRITE BEFORE the code and triple quote.
